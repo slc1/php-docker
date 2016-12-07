@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
         libxslt-dev \
         zlib1g-dev \
         libmemcached-dev \
-				libssl-dev \
+        libssl-dev \
         curl \
         git \
-   && apt-get autoremove -y \
-   && apt-get clean all
+    && apt-get autoremove -y \
+    && apt-get clean all
 
 RUN docker-php-ext-install mcrypt
 RUN docker-php-ext-install intl
@@ -32,11 +32,11 @@ RUN curl -L -o /tmp/memcached.tar.gz https://github.com/php-memcached-dev/php-me
     && tar xfz /tmp/memcached.tar.gz -C memcached --strip-components=1 \
     && rm -r /tmp/memcached.tar.gz \
     && ( \
-      cd memcached \
-      && phpize \
-      && ./configure --enable-memcached \
-      && make -j$(nproc) \
-      && make install \
+        cd memcached \
+        && phpize \
+        && ./configure --enable-memcached \
+        && make -j$(nproc) \
+        && make install \
     ) \
     && rm -r memcached \
     && docker-php-ext-enable memcached
@@ -56,11 +56,11 @@ RUN curl -L -o /tmp/timecop.tar.gz https://github.com/hnw/php-timecop/archive/${
     && tar xfz /tmp/timecop.tar.gz -C timecop --strip-components=1 \
     && rm -r /tmp/timecop.tar.gz \
     && ( \
-      cd timecop \
-      && phpize \
-      && ./configure \
-      && make -j$(nproc) \
-      && make install \
+        cd timecop \
+        && phpize \
+        && ./configure \
+        && make -j$(nproc) \
+        && make install \
     ) \
     && rm -r timecop \
     && docker-php-ext-enable timecop
