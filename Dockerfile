@@ -26,20 +26,9 @@ RUN pecl install -o -f redis \
     && rm -rf /tmp/pear
 RUN docker-php-ext-enable redis
 
-ENV PHP_MEMCACHED_VERSION php7
-RUN curl -L -o /tmp/memcached.tar.gz https://github.com/php-memcached-dev/php-memcached/archive/${PHP_MEMCACHED_VERSION}.tar.gz \
-    && mkdir -p memcached \
-    && tar xfz /tmp/memcached.tar.gz -C memcached --strip-components=1 \
-    && rm -r /tmp/memcached.tar.gz \
-    && ( \
-        cd memcached \
-        && phpize \
-        && ./configure --enable-memcached \
-        && make -j$(nproc) \
-        && make install \
-    ) \
-    && rm -r memcached \
-    && docker-php-ext-enable memcached
+RUN pecl install -o -f memcached \
+    && rm -rf /tmp/pear
+RUN docker-php-ext-enable memcached
 
 RUN pecl install -o -f xdebug mongodb \
     && rm -rf /tmp/pear
