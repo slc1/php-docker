@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
         zlib1g-dev \
         libmemcached-dev \
         libssl-dev \
+        libmagickwand-dev \
         curl \
         git \
     && apt-get autoremove -y \
@@ -33,6 +34,10 @@ RUN docker-php-ext-enable memcached
 RUN pecl install -o -f xdebug mongodb \
     && rm -rf /tmp/pear
 RUN docker-php-ext-enable mongodb
+
+RUN pecl install -o -f imagick \
+    && rm -rf /tmp/pear
+RUN docker-php-ext-enable imagick
 
 RUN pecl config-set preferred_state beta \
     && pecl install -o -f apcu_bc \
