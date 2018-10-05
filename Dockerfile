@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get autoremove -y \
     && apt-get clean all
 
-RUN docker-php-ext-install mcrypt
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install pdo_mysql
