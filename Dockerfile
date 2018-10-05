@@ -31,7 +31,10 @@ RUN pecl install -o -f memcached \
     && rm -rf /tmp/pear
 RUN docker-php-ext-enable memcached
 
-RUN pecl install -o -f xdebug mongodb \
+RUN pecl install -o -f xdebug \
+    && rm -rf /tmp/pear
+
+RUN pecl install -o -f mongodb \
     && rm -rf /tmp/pear
 RUN docker-php-ext-enable mongodb
 
