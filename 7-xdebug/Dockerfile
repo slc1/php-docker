@@ -47,10 +47,15 @@ RUN pecl install -o -f imagick \
     && rm -rf /tmp/pear
 RUN docker-php-ext-enable imagick
 
-RUN pecl config-set preferred_state beta \
-    && pecl install -o -f apcu_bc \
+RUN pecl install -o -f apcu \
     && rm -rf /tmp/pear
-RUN docker-php-ext-enable --ini-name 0-apc.ini apcu apc
+RUN docker-php-ext-enable --ini-name 0-apcu.ini apcu
+
+##<apcu_bc>##
+RUN pecl install -o -f apcu_bc \
+    && rm -rf /tmp/pear
+RUN docker-php-ext-enable --ini-name 1-apc.ini apc
+##</apcu_bc>##
 
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
@@ -58,9 +63,11 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-RUN pecl install -o -f xdebug-beta \
+RUN pecl install -o -f xdebug \
     && rm -rf /tmp/pear
+##<xdebug>##
 RUN docker-php-ext-enable xdebug
+##</xdebug>##
 
 RUN mkdir -p /opt/workspace
 WORKDIR /opt/workspace
