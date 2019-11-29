@@ -1,4 +1,4 @@
-FROM php:%%VARIANT%%-cli
+FROM php:7.4-rc-cli
 
 MAINTAINER Fred Cox "mcfedr@gmail.com"
 
@@ -14,10 +14,6 @@ RUN apt-get update && apt-get install -y \
 # for zip
         zlib1g-dev \
         libzip-dev \
-##<mcrypt>##
-# for mcrypt
-        libmcrypt-dev \
-##</mcrypt>##
 # for memcached
         libmemcached-dev \
 ##<libonig>##
@@ -30,9 +26,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get autoremove -y \
     && apt-get clean all
 
-##<mcrypt>##
-RUN docker-php-ext-install mcrypt
-##</mcrypt>##
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install pdo_mysql
@@ -76,9 +69,6 @@ RUN mv composer.phar /usr/local/bin/composer
 
 RUN pecl install -o -f xdebug \
     && rm -rf /tmp/pear
-##<xdebug>##
-RUN docker-php-ext-enable xdebug
-##</xdebug>##
 
 RUN mkdir -p /opt/workspace
 WORKDIR /opt/workspace
