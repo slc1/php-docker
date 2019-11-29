@@ -11,8 +11,8 @@ Images are based on the `php:cli` upstream.
 
 * `7`, `latest`
 * `7-xdebug`
-* `7.4-rc`
-* `7.4-rc-xdebug`
+* `7.4`
+* `7.4-xdebug`
 * `7.3`
 * `7.3-xdebug`
 * `7.2`

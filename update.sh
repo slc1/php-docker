@@ -8,7 +8,7 @@ declare -A pecl=(
   ['xdebug']='2.5.5'
 )
 
-for variant in '5' '5.5' '7' '7.2' '7.3' '7.4-rc'; do
+for variant in '5' '5.5' '7' '7.2' '7.3' '7.4'; do
   for type in 'default' 'xdebug'; do
     template="Dockerfile.template"
     if [ "$type" != "default" ]; then
