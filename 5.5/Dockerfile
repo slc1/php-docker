@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ##<apcu>##
 RUN pecl install -o -f apcu-4.0.11 \
     && rm -rf /tmp/pear \
-    && docker-php-ext-enable --ini-name 0-apcu.ini apcu
+    && docker-php-ext-enable --ini-name 0-apcu.ini apcu \
+    && echo "apc.enable_cli=1" >> $PHP_INI_DIR/conf.d/0-apcu.ini
 ##</apcu>##
 
 
