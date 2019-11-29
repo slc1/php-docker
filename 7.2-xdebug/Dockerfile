@@ -59,7 +59,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install -j$(nproc) intl \
     && apt-get purge -y --auto-remove libicu-dev \
     && rm -rf /var/lib/apt/lists/*
-##</intl-buster>##
+##</intl>##
 
 
 ##<memcached>##
