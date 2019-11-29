@@ -1,8 +1,6 @@
 FROM php:7.3-cli
 
-MAINTAINER Fred Cox "mcfedr@gmail.com"
-
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         git \
 # For composer mostly
@@ -19,8 +17,7 @@ RUN apt-get update && apt-get install -y \
         libssl-dev \
 # for imagic
         libmagickwand-dev \
-    && apt-get autoremove -y \
-    && apt-get clean all
+    && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install mbstring
