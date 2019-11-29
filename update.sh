@@ -40,6 +40,15 @@ for variant in '5' '5.5' '7' '7.4' '7.3' '7.2'; do
       '
     fi
 
+    if [[ "$variant" = 7.4* ]] || [ "$variant" = "7" ]; then
+      # Currently protobuf doesnt build on php 7.4
+      # https://github.com/protocolbuffers/protobuf/issues/6180
+      extraSed='
+        '"$extraSed"'
+        /##<protobuf>##/,/##<\/protobuf>##/d;
+      '
+    fi
+
     if [ "$type" != "xdebug" ]; then
       extraSed='
         '"$extraSed"'

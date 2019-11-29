@@ -33,6 +33,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 ##</gd>##
 
+##<grpc>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        zlib1g zlib1g-dev \
+    && pecl install -o -f grpc \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable grpc \
+    && apt-get purge -y --auto-remove zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</grpc>##
+
 ##<imagick>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
 ##<stretch>##
@@ -85,6 +95,22 @@ RUN pecl install -o -f mongodb \
 RUN docker-php-ext-install -j$(nproc) opcache
 ##</opcache>##
 
+##<opencensus>##
+RUN curl -L https://github.com/census-instrumentation/opencensus-php/archive/master.tar.gz -o /tmp/opencensus.tar.gz \
+    && mkdir -p /tmp/opencensus \
+    && tar -xf /tmp/opencensus.tar.gz -C /tmp/opencensus --strip-components=1 \
+    && rm /tmp/opencensus.tar.gz \
+    && ( \
+      cd /tmp/opencensus/ext \
+      && phpize \
+      && ./configure --enable-opencensus \
+      && make -j "$(nproc)" \
+      && make install \
+    ) \
+    && rm -r /tmp/opencensus \
+    && docker-php-ext-enable opencensus
+##</opencensus>##
+
 ##<pcntl>##
 RUN docker-php-ext-install -j$(nproc) pcntl
 ##</pcntl>##
@@ -100,6 +126,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get purge -y --auto-remove libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 ##</pdo_pgsql>##
+
+##<protobuf>##
+RUN pecl install -o -f protobuf \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable protobuf
+##</protobuf>##
 
 ##<redis>##
 RUN pecl install -o -f redis-2.2.8 \
