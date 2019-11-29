@@ -7,13 +7,43 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         unzip \
     && rm -rf /var/lib/apt/lists/*
 
-##<mcrypt>##
+##<apcu>##
+RUN pecl install -o -f apcu-4.0.11 \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable --ini-name 0-apcu.ini apcu
+##</apcu>##
+
+
+##<bcmath>##
+RUN docker-php-ext-install -j$(nproc) bcmath
+##</bcmath>##
+
+##<gd>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libmcrypt4 libmcrypt-dev \
-    && docker-php-ext-install mcrypt \
-    && apt-get purge -y --auto-remove libmcrypt-dev \
+        libfreetype6 \
+        libfreetype6-dev \
+        libjpeg62-turbo \
+        libjpeg62-turbo-dev \
+        libpng16-16 \
+        libpng-dev \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
+    && apt-get purge -y --auto-remove libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     && rm -rf /var/lib/apt/lists/*
-##</mcrypt>##
+##</gd>##
+
+##<imagick>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+##<stretch>##
+        libmagickwand-6.q16-3 \
+##</stretch>##
+        libmagickwand-dev \
+    && pecl install -o -f imagick \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable imagick \
+    && apt-get purge -y --auto-remove libmagickwand-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</imagick>##
 
 ##<intl>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -21,60 +51,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libicu57 \
 ##</stretch>##
         libicu-dev \
-    && docker-php-ext-install intl \
+    && docker-php-ext-install -j$(nproc) intl \
     && apt-get purge -y --auto-remove libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 ##</intl-buster>##
 
-##<pdo_mysql>##
-RUN docker-php-ext-install pdo_mysql
-##</pdo_mysql>##
-
-##<pdo_pgsql>##
+##<mcrypt>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libpq5 libpq-dev \
-    && docker-php-ext-install pdo_pgsql \
-    && apt-get purge -y --auto-remove libpq-dev \
+        libmcrypt4 libmcrypt-dev \
+    && docker-php-ext-install -j$(nproc) mcrypt \
+    && apt-get purge -y --auto-remove libmcrypt-dev \
     && rm -rf /var/lib/apt/lists/*
-##</pdo_pgsql>##
-
-##<pcntl>##
-RUN docker-php-ext-install pcntl
-##</pcntl>##
-
-##<xsl>##
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        libxslt1.1 libxslt1-dev \
-    && docker-php-ext-install xsl \
-    && apt-get purge -y --auto-remove libxslt1-dev \
-    && rm -rf /var/lib/apt/lists/*
-##</xsl>##
-
-##<zip>##
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        libzip4 libzip-dev \
-    && docker-php-ext-install zip \
-    && apt-get purge -y --auto-remove libzip-dev \
-    && rm -rf /var/lib/apt/lists/*
-##</zip>##
-
-##<soap>##
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        libxml2 libxml2-dev \
-    && docker-php-ext-install soap \
-    && apt-get purge -y --auto-remove libxml2-dev \
-    && rm -rf /var/lib/apt/lists/*
-##</soap>##
-
-##<bcmath>##
-RUN docker-php-ext-install bcmath
-##</bcmath>##
-
-##<redis>##
-RUN pecl install -o -f redis-2.2.8 \
-    && rm -rf /tmp/pear \
-    && docker-php-ext-enable redis
-##</redis>##
+##</mcrypt>##
 
 ##<memcached>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -92,25 +80,59 @@ RUN pecl install -o -f mongodb \
     && docker-php-ext-enable mongodb
 ##</mongodb>##
 
-##<imagick>##
+##<opcache>##
+RUN docker-php-ext-install -j$(nproc) opcache
+##</opcache>##
+
+##<pcntl>##
+RUN docker-php-ext-install -j$(nproc) pcntl
+##</pcntl>##
+
+##<pdo_mysql>##
+RUN docker-php-ext-install -j$(nproc) pdo_mysql
+##</pdo_mysql>##
+
+##<pdo_pgsql>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
-##<stretch>##
-        libmagickwand-6.q16-3 \
-##</stretch>##
-        libmagickwand-dev \
-    && pecl install -o -f imagick \
-    && rm -rf /tmp/pear \
-    && docker-php-ext-enable imagick \
-    && apt-get purge -y --auto-remove libmagickwand-dev \
+        libpq5 libpq-dev \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && apt-get purge -y --auto-remove libpq-dev \
     && rm -rf /var/lib/apt/lists/*
-##</imagick>##
+##</pdo_pgsql>##
 
-##<apcu>##
-RUN pecl install -o -f apcu-4.0.11 \
+##<redis>##
+RUN pecl install -o -f redis-2.2.8 \
     && rm -rf /tmp/pear \
-    && docker-php-ext-enable --ini-name 0-apcu.ini apcu
-##</apcu>##
+    && docker-php-ext-enable redis
+##</redis>##
 
+##<soap>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libxml2 libxml2-dev \
+    && docker-php-ext-install -j$(nproc) soap \
+    && apt-get purge -y --auto-remove libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</soap>##
+
+##<sockets>##
+RUN docker-php-ext-install -j$(nproc) sockets
+##</sockets>##
+
+##<xsl>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libxslt1.1 libxslt1-dev \
+    && docker-php-ext-install -j$(nproc) xsl \
+    && apt-get purge -y --auto-remove libxslt1-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</xsl>##
+
+##<zip>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libzip4 libzip-dev \
+    && docker-php-ext-install -j$(nproc) zip \
+    && apt-get purge -y --auto-remove libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</zip>##
 
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
