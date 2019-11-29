@@ -3,69 +3,127 @@ FROM php:5-cli
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         git \
-# For composer mostly
+# For composer
         unzip \
-# for intl
-        libicu-dev \
-# for xsl
-        libxslt-dev \
-# for zip
-        zlib1g-dev \
-        libzip-dev \
-##<mcrypt>##
-# for mcrypt
-        libmcrypt-dev \
-##</mcrypt>##
-# for memcached
-        libmemcached-dev \
-        libssl-dev \
-# for imagic
-        libmagickwand-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ##<mcrypt>##
-RUN docker-php-ext-install mcrypt
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libmcrypt4 libmcrypt-dev \
+    && docker-php-ext-install mcrypt \
+    && apt-get purge -y --auto-remove libmcrypt-dev \
+    && rm -rf /var/lib/apt/lists/*
 ##</mcrypt>##
-RUN docker-php-ext-install intl
-RUN docker-php-ext-install mbstring
+
+##<intl>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+##<stretch>##
+        libicu57 \
+##</stretch>##
+        libicu-dev \
+    && docker-php-ext-install intl \
+    && apt-get purge -y --auto-remove libicu-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</intl-buster>##
+
+##<pdo_mysql>##
 RUN docker-php-ext-install pdo_mysql
+##</pdo_mysql>##
+
+##<pdo_pgsql>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libpq5 libpq-dev \
+    && docker-php-ext-install pdo_pgsql \
+    && apt-get purge -y --auto-remove libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</pdo_pgsql>##
+
+##<pcntl>##
 RUN docker-php-ext-install pcntl
-RUN docker-php-ext-install xsl
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install soap
+##</pcntl>##
+
+##<xsl>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libxslt1.1 libxslt1-dev \
+    && docker-php-ext-install xsl \
+    && apt-get purge -y --auto-remove libxslt1-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</xsl>##
+
+##<zip>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libzip4 libzip-dev \
+    && docker-php-ext-install zip \
+    && apt-get purge -y --auto-remove libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</zip>##
+
+##<soap>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libxml2 libxml2-dev \
+    && docker-php-ext-install soap \
+    && apt-get purge -y --auto-remove libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</soap>##
+
+##<bcmath>##
 RUN docker-php-ext-install bcmath
+##</bcmath>##
 
+##<redis>##
 RUN pecl install -o -f redis-2.2.8 \
-    && rm -rf /tmp/pear
-RUN docker-php-ext-enable redis
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable redis
+##</redis>##
 
-RUN pecl install -o -f memcached-2.2.0 \
-    && rm -rf /tmp/pear
-RUN docker-php-ext-enable memcached
+##<memcached>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libmemcached11 libmemcachedutil2 libmemcached-dev zlib1g zlib1g-dev \
+    && pecl install -o -f memcached-2.2.0 \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable memcached \
+    && apt-get purge -y --auto-remove libmemcached-dev zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</memcached>##
 
+##<mongodb>##
 RUN pecl install -o -f mongodb \
-    && rm -rf /tmp/pear
-RUN docker-php-ext-enable mongodb
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable mongodb
+##</mongodb>##
 
-RUN pecl install -o -f imagick \
-    && rm -rf /tmp/pear
-RUN docker-php-ext-enable imagick
+##<imagick>##
+RUN apt-get update && apt-get install -y --no-install-recommends \
+##<stretch>##
+        libmagickwand-6.q16-3 \
+##</stretch>##
+        libmagickwand-dev \
+    && pecl install -o -f imagick \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable imagick \
+    && apt-get purge -y --auto-remove libmagickwand-dev \
+    && rm -rf /var/lib/apt/lists/*
+##</imagick>##
 
+##<apcu>##
 RUN pecl install -o -f apcu-4.0.11 \
-    && rm -rf /tmp/pear
-RUN docker-php-ext-enable --ini-name 0-apcu.ini apcu
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable --ini-name 0-apcu.ini apcu
+##</apcu>##
 
 
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
 
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
+##<xdebug>##
 RUN pecl install -o -f xdebug-2.5.5 \
     && rm -rf /tmp/pear
-##<xdebug>##
+##<xdebug-enable>##
 RUN docker-php-ext-enable xdebug
+##</xdebug-enable>##
 ##</xdebug>##
 
 RUN mkdir -p /opt/workspace

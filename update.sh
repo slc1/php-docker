@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-declare -A pecl=(
+declare -A pecl5=(
   ['redis']='2.2.8'
   ['apcu']='4.0.11'
   ['memcached']='2.2.0'
   ['xdebug']='2.5.5'
 )
 
-for variant in '5' '5.5' '7' '7.2' '7.3' '7.4'; do
+for variant in '5' '5.5' '7' '7.4' '7.3' '7.2'; do
   for type in 'default' 'xdebug'; do
     template="Dockerfile.template"
     if [ "$type" != "default" ]; then
@@ -20,35 +20,30 @@ for variant in '5' '5.5' '7' '7.2' '7.3' '7.4'; do
     mkdir -p "$dir"
     extraSed=''
 
-    if [[ "$variant" = 5* ]]; then
-      for package in "${!pecl[@]}"; do
+    if [[ "$variant" = 5* ]]; then #php5
+      for package in "${!pecl5[@]}"; do
         extraSed='
           '"$extraSed"'
-          s/pecl install -o -f '"$package"' /pecl install -o -f '"$package-${pecl[$package]}"' /
+          s/pecl install -o -f '"$package"' /pecl install -o -f '"$package-${pecl5[$package]}"' /
         '
       done
       extraSed='
         '"$extraSed"'
         /##<apcu_bc>##/,/##<\/apcu_bc>##/d;
+        /##<buster>##/,/##<\/buster>##/d;
       '
-    else
+    else #php7
       extraSed='
         '"$extraSed"'
         /##<mcrypt>##/,/##<\/mcrypt>##/d;
-      '
-    fi
-
-    if [ "$variant" != "7.4" ] && [ "$variant" != "7" ]; then
-      extraSed='
-        '"$extraSed"'
-        /##<libonig>##/,/##<\/libonig>##/d;
+        /##<stretch>##/,/##<\/stretch>##/d;
       '
     fi
 
     if [ "$type" != "xdebug" ]; then
       extraSed='
         '"$extraSed"'
-        /##<xdebug>##/,/##<\/xdebug>##/d;
+        /##<xdebug-enable>##/,/##<\/xdebug-enable>##/d;
       '
     fi
     sed -E '
