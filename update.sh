@@ -38,7 +38,7 @@ for variant in '5' '5.5' '7' '7.2' '7.3' '7.4'; do
       '
     fi
 
-    if [ "$variant" != "7.4-rc" ]; then
+    if [ "$variant" != "7.4" ] && [ "$variant" != "7" ]; then
       extraSed='
         '"$extraSed"'
         /##<libonig>##/,/##<\/libonig>##/d;

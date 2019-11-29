@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
 # for memcached
         libmemcached-dev \
+##<libonig>##
+# For mbstring
+        libonig-dev \
+##</libonig>##
         libssl-dev \
 # for imagic
         libmagickwand-dev \
