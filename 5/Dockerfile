@@ -95,21 +95,6 @@ RUN pecl install -o -f mongodb \
 RUN docker-php-ext-install -j$(nproc) opcache
 ##</opcache>##
 
-##<opencensus>##
-RUN curl -L https://github.com/census-instrumentation/opencensus-php/archive/master.tar.gz -o /tmp/opencensus.tar.gz \
-    && mkdir -p /tmp/opencensus \
-    && tar -xf /tmp/opencensus.tar.gz -C /tmp/opencensus --strip-components=1 \
-    && rm /tmp/opencensus.tar.gz \
-    && ( \
-      cd /tmp/opencensus/ext \
-      && phpize \
-      && ./configure --enable-opencensus \
-      && make -j "$(nproc)" \
-      && make install \
-    ) \
-    && rm -r /tmp/opencensus \
-    && docker-php-ext-enable opencensus
-##</opencensus>##
 
 ##<pcntl>##
 RUN docker-php-ext-install -j$(nproc) pcntl

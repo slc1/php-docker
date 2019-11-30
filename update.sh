@@ -30,6 +30,7 @@ for variant in '5' '5.5' '7' '7.4' '7.3' '7.2'; do
       extraSed='
         '"$extraSed"'
         /##<apcu_bc>##/,/##<\/apcu_bc>##/d;
+        /##<opencensus>##/,/##<\/opencensus>##/d;
         /##<buster>##/,/##<\/buster>##/d;
       '
     else #php7
