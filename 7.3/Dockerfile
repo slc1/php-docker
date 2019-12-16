@@ -32,7 +32,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg62-turbo-dev \
         libpng16-16 \
         libpng-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+        libwebp6 \
+        libwebp-dev \
+        libxpm4 \
+        libxpm-dev \
+##<php5-7.3>##
+    && docker-php-ext-configure gd --with-gd --with-jpeg-dir --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir --with-webp-dir \
+##</php5-7.3>##
     && docker-php-ext-install -j$(nproc) gd \
     && apt-get purge -y --auto-remove libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     && rm -rf /var/lib/apt/lists/*

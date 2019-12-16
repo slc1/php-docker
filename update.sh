@@ -44,6 +44,12 @@ for variant in '5' '5.5' '7' '7.4' '7.3' '7.2'; do
     if [[ "$variant" = 7.4* ]] || [ "$variant" = "7" ]; then
       extraSed='
         '"$extraSed"'
+        /##<php5-7.3>##/,/##<\/php5-7.3>##/d;
+      '
+    else
+      extraSed='
+        '"$extraSed"'
+        /##<php7.4>##/,/##<\/php7.4>##/d;
       '
     fi
 
