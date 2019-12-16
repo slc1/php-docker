@@ -125,6 +125,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 ##</pdo_pgsql>##
 
+##<protobuf>##
+RUN pecl install -o -f protobuf \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable protobuf
+##</protobuf>##
 
 ##<redis>##
 RUN pecl install -o -f redis \
