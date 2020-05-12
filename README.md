@@ -24,24 +24,31 @@ Images are based on the `php:cli` upstream.
 
 ## Extensions
 
-All images have a number of extensions enabled
+All images have a number of extensions enabled.
 
-- intl
-- mbstring
-- pdo_mysql
-- pcntl
-- xsl
-- xip
-- soap
-- bcmath
-- redis
-- memcached
-- mongodb
-- imagick
 - apcu
 - apcu_bc
-- xdebug - All images have `xdebug` installed, but the `xdebug` tag has it enabled.
+- bcmath
+- gd
+- grpc
+- imagick
+- intl
+- mbstring
 - mcrypt - Only on PHP 5 images.
+- memcached
+- mongodb
+- opcache
+- opencensus
+- pcntl
+- pdo_mysql
+- pdo_pgsql
+- protobuf
+- redis
+- soap
+- sockets
+- xsl
+- xdebug - All images have `xdebug` installed, but the `xdebug` tag has it enabled.
+- zip
 
 The latest version is used where ever possible, 
 some are pinned to older versions for PHP 5 images.
@@ -53,3 +60,9 @@ some are pinned to older versions for PHP 5 images.
 ## Build an app
 
     docker run -ti --rm --volume=$(pwd):/opt/workspace ekreative/php ./bin/phpunit
+
+## Info
+
+I have used https://github.com/mlocati/docker-php-extension-installer has been a
+great to get extensions installed. There are a couple that are not using it
+because they are not currently supported.

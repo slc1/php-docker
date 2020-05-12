@@ -1,13 +1,12 @@
 FROM php:5-cli-alpine
 
-##<debian>##
-RUN apt-get update && apt-get install -y --no-install-recommends \
+##<alpine>##
+RUN apk --no-cache add \
         curl \
         git \
 # For composer
-        unzip \
-    && rm -rf /var/lib/apt/lists/*
-##</debian>##
+        unzip
+##</alpine>##
 
 # https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
