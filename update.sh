@@ -5,56 +5,56 @@ phpVersions='7 7.4 7.3 7.2 5 5.6'
 distros='debian alpine'
 
 for variant in $phpVersions; do
-	for distro in $distros; do
-		for type in 'default' 'xdebug'; do
-			extraSed=''
-			template="Dockerfile.template"
-			dir="$variant"
-			varientD=""
+  for distro in $distros; do
+    for type in 'default' 'xdebug'; do
+      extraSed=''
+      template="Dockerfile.template"
+      dir="$variant"
+      varientD=""
 
-			if [ "$distro" != "debian" ]; then
-				dir="$dir-$distro"
-				varientD="-$distro"
-				extraSed='
+      if [ "$distro" != "debian" ]; then
+        dir="$dir-$distro"
+        varientD="-$distro"
+        extraSed='
 					'"$extraSed"'
 					/##<debian>##/,/##<\/debian>##/d;
 				'
-			else
-				extraSed='
+      else
+        extraSed='
 					'"$extraSed"'
 					/##<alpine>##/,/##<\/alpine>##/d;
 				'
-			fi
+      fi
 
-			if [ "$type" != "default" ]; then
-				dir="$variant-$type"
-			fi
+      if [ "$type" != "default" ]; then
+        dir="$variant-$type"
+      fi
 
-			if [[ "$variant" == 5* ]]; then #php5
-				extraSed='
+      if [[ "$variant" == 5* ]]; then #php5
+        extraSed='
 					'"$extraSed"'
 					/##<opencensus>##/,/##<\/opencensus>##/d;
 				'
-			else #php7
-				extraSed='
+      else #php7
+        extraSed='
 					'"$extraSed"'
 					/##<mcrypt>##/,/##<\/mcrypt>##/d;
 				'
-			fi
+      fi
 
-			if [ "$type" != "xdebug" ]; then
-				extraSed='
+      if [ "$type" != "xdebug" ]; then
+        extraSed='
 					'"$extraSed"'
 					/##<xdebug-enable>##/,/##<\/xdebug-enable>##/d;
 				'
-			fi
+      fi
 
-			rm -rf "$dir"
-			mkdir -p "$dir"
-			sed -E '
+      rm -rf "$dir"
+      mkdir -p "$dir"
+      sed -E '
 				'"$extraSed"'
 				s/%%VARIANT%%/'"$variant-cli$varientD"'/;
 			' $template >"$dir/Dockerfile"
-		done
-	done
+    done
+  done
 done
