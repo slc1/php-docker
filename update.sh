@@ -19,6 +19,7 @@ for variant in $phpVersions; do
 					/##<debian>##/,/##<\/debian>##/d;
 				'
 			else
+				varientD=""
 				extraSed='
 					'"$extraSed"'
 					/##<alpine>##/,/##<\/alpine>##/d;

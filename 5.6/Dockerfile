@@ -1,4 +1,4 @@
-FROM php:5.6-cli-alpine
+FROM php:5.6-cli
 
 ##<debian>##
 RUN apt-get update && apt-get install -y --no-install-recommends \

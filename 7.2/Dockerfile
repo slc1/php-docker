@@ -1,4 +1,4 @@
-FROM php:7.2-cli-alpine
+FROM php:7.2-cli
 
 ##<debian>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
