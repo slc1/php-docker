@@ -10,6 +10,7 @@ for variant in $phpVersions; do
 			extraSed=''
 			template="Dockerfile.template"
 			dir="$variant"
+			varientD=""
 
 			if [ "$distro" != "debian" ]; then
 				dir="$dir-$distro"
@@ -19,7 +20,6 @@ for variant in $phpVersions; do
 					/##<debian>##/,/##<\/debian>##/d;
 				'
 			else
-				varientD=""
 				extraSed='
 					'"$extraSed"'
 					/##<alpine>##/,/##<\/alpine>##/d;
@@ -30,7 +30,7 @@ for variant in $phpVersions; do
 				dir="$variant-$type"
 			fi
 
-			if [[ "$variant" = 5* ]]; then #php5
+			if [[ "$variant" == 5* ]]; then #php5
 				extraSed='
 					'"$extraSed"'
 					/##<opencensus>##/,/##<\/opencensus>##/d;
@@ -54,7 +54,7 @@ for variant in $phpVersions; do
 			sed -E '
 				'"$extraSed"'
 				s/%%VARIANT%%/'"$variant-cli$varientD"'/;
-			' $template > "$dir/Dockerfile"
+			' $template >"$dir/Dockerfile"
 		done
 	done
 done
