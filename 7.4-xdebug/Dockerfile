@@ -38,7 +38,7 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
 
 ADD https://getcomposer.org/composer-stable.phar /usr/local/bin/composer
 RUN chmod +rx /usr/local/bin/composer
-RUN composer global require symfony/flex:"1.6.*" \
+RUN composer global require symfony/flex \
     && rm -rf /home/composer/.composer/cache
 
 ##<xdebug>##
