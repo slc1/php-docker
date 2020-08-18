@@ -47,8 +47,10 @@ RUN install-php-extensions apcu \
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
 
-RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+ADD https://getcomposer.org/composer-stable.phar /usr/local/bin/composer
+RUN chmod +rx /usr/local/bin/composer
+RUN composer global require symfony/flex:"1.6.*" \
+    && rm -rf /home/composer/.composer/cache
 
 ##<xdebug>##
 RUN pecl install -o -f xdebug \
