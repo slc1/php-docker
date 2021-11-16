@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-phpVersions='7 7.4 7.3 7.2 5 5.6'
+phpVersions='8 8.0 7 7.4 7.3 7.2 5 5.6'
 distros='debian alpine'
 
 for variant in $phpVersions; do
