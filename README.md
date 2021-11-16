@@ -66,3 +66,7 @@ some are pinned to older versions for PHP 5 images.
 I have used https://github.com/mlocati/docker-php-extension-installer has been a
 great to get extensions installed. There are a couple that are not using it
 because they are not currently supported.
+
+## Add new versions
+
+To add dockerfiles for new PHP versions edit the `update.sh` file and run it, all the other files are generated automatically.
