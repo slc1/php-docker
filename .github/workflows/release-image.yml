@@ -32,7 +32,7 @@ jobs:
 
       - name: Check hadolint
         run: |
-          hadolint */Dockerfile
+          hadolint --ignore DL3059 */Dockerfile
 
   checks-shfmt:
     runs-on: ubuntu-latest
