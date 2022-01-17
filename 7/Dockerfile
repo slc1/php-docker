@@ -1,6 +1,7 @@
 FROM php:7-cli
 
 ##<debian>##
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         git \
@@ -10,9 +11,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ##</debian>##
 
 # https://github.com/mlocati/docker-php-extension-installer
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions apcu \
+RUN chmod +x /usr/local/bin/install-php-extensions \
+    && install-php-extensions apcu \
         bcmath \
         gd \
         grpc \

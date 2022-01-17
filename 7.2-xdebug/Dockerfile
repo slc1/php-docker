@@ -1,6 +1,7 @@
 FROM php:7.2-cli-alpine
 
 ##<alpine>##
+# hadolint ignore=DL3018
 RUN apk --no-cache add \
         curl \
         git \
@@ -9,9 +10,10 @@ RUN apk --no-cache add \
 ##</alpine>##
 
 # https://github.com/mlocati/docker-php-extension-installer
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions apcu \
+RUN chmod +x /usr/local/bin/install-php-extensions \
+    && install-php-extensions apcu \
         bcmath \
         gd \
         grpc \
