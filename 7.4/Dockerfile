@@ -34,7 +34,8 @@ RUN chmod +x /usr/local/bin/install-php-extensions \
         soap \
         sockets \
         xsl \
-        zip
+        zip \
+    && IPE_DONT_ENABLE=1 install-php-extensions xdebug
 
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini \
     && echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory.ini
@@ -44,10 +45,6 @@ RUN chmod +rx /usr/local/bin/composer \
     && composer global require symfony/flex \
     && rm -rf /home/composer/.composer/cache
 
-##<xdebug>##
-RUN pecl install -o -f xdebug \
-    && rm -rf /tmp/pear
-##</xdebug>##
 
 RUN mkdir -p /opt/workspace
 WORKDIR /opt/workspace
