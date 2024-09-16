@@ -1,14 +1,13 @@
-FROM php:7.3-cli
+FROM php:8.3-cli-alpine
 
-##<debian>##
-# hadolint ignore=DL3008
-RUN apt-get update && apt-get install -y --no-install-recommends \
+##<alpine>##
+# hadolint ignore=DL3018
+RUN apk --no-cache add \
         curl \
         git \
 # For composer
-        unzip \
-    && rm -rf /var/lib/apt/lists/*
-##</debian>##
+        unzip
+##</alpine>##
 
 # https://github.com/mlocati/docker-php-extension-installer
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -46,6 +45,9 @@ RUN chmod +rx /usr/local/bin/composer \
     && composer global require symfony/flex \
     && rm -rf /home/composer/.composer/cache
 
+##<xdebug-enable>##
+RUN docker-php-ext-enable-xdebug
+##</xdebug-enable>##
 
 RUN mkdir -p /opt/workspace
 WORKDIR /opt/workspace

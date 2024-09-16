@@ -67,7 +67,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        version: [ '7', '7.3', '7.4', '8', '8.0', '8.1' ]
+        version: [ '7', '7.3', '7.4', '8', '8.0', '8.1', '8.3' ]
         distro: ['', '-alpine']
         debug: ['', '-xdebug']
         exclude:

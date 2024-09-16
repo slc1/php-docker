@@ -41,6 +41,7 @@ RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini \
 
 ADD https://getcomposer.org/composer-stable.phar /usr/local/bin/composer
 RUN chmod +rx /usr/local/bin/composer \
+    && composer global config --no-plugins allow-plugins.symfony/flex true \
     && composer global require symfony/flex \
     && rm -rf /home/composer/.composer/cache
 
