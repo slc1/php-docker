@@ -34,6 +34,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions \
         sockets \
         xsl \
         zip \
+        ftp \
     && IPE_DONT_ENABLE=1 install-php-extensions xdebug
 
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini \
